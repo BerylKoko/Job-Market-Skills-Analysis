@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Executive-style presentation of a job market and skills analysis across analyst, product, and BI roles." />
+  <title>Job Market Signals — Beryl Koko</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <section class="hero section">
+      <div class="eyebrow-row">
+        <span>JOB MARKET & SKILLS ANALYSIS</span>
+        <span class="status-dot">Exploratory analysis</span>
+      </div>
+
+      <div class="hero-grid">
+        <div>
+          <p class="overline">The question</p>
+          <h1>What does the market actually ask from analyst and product candidates?</h1>
+          <p class="hero-copy">
+            A focused analysis of role volume, seniority, compensation, and technical signals
+            across analyst, product, and business-intelligence postings.
+          </p>
+        </div>
+
+        <div class="hero-note">
+          <span>Dataset scope</span>
+          <strong>14,681</strong>
+          <p>source postings, narrowed to 188 clearly matched target roles.</p>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-card">
+          <span>Target postings</span>
+          <strong>188</strong>
+          <small>5 role families</small>
+        </article>
+        <article class="metric-card">
+          <span>Explicitly entry level</span>
+          <strong>14.9%</strong>
+          <small>28 postings</small>
+        </article>
+        <article class="metric-card">
+          <span>#1 technical signal</span>
+          <strong>SQL</strong>
+          <small>29.3% of target descriptions</small>
+        </article>
+        <article class="metric-card">
+          <span>Highest observed median</span>
+          <strong>$174K</strong>
+          <small>Product management · salary subset</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split-section">
+      <div class="section-copy">
+        <p class="overline">01 · ROLE MIX</p>
+        <h2>The dataset is not evenly distributed across adjacent roles.</h2>
+        <p>
+          Business Analyst and Product Management account for most of the matched postings.
+          Product Analyst is too small to support strong comparison, so the analysis keeps its
+          sample-size limitation visible instead of pretending every category is equally stable.
+        </p>
+        <div class="annotation">
+          <span>Read this as</span>
+          <p>role availability in this dataset — not a census of the full labor market.</p>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span>Matched postings by role</span>
+          <small>n = 188</small>
+        </div>
+        <div id="roleBars" class="role-bars" aria-label="Role posting counts"></div>
+      </div>
+    </section>
+
+    <section class="section focus-section">
+      <div class="section-heading">
+        <div>
+          <p class="overline">02 · SENIORITY</p>
+          <h2>“Entry level” is not the default.</h2>
+        </div>
+        <p>
+          The strongest contrast appears when role families are viewed as different markets
+          rather than one generic early-career bucket.
+        </p>
+      </div>
+
+      <div class="entry-panel">
+        <div class="entry-big">
+          <span>Only</span>
+          <strong>14.9%</strong>
+          <p>of the matched postings were explicitly labeled Entry level.</p>
+        </div>
+
+        <div class="entry-comparison">
+          <div class="entry-row">
+            <span>Data Analyst</span>
+            <div class="entry-track"><i style="width:42.2%"></i></div>
+            <strong>42.2%</strong>
+          </div>
+          <div class="entry-row">
+            <span>Business Analyst</span>
+            <div class="entry-track"><i style="width:7.5%"></i></div>
+            <strong>7.5%</strong>
+          </div>
+          <div class="entry-row">
+            <span>Product Management</span>
+            <div class="entry-track"><i style="width:6.8%"></i></div>
+            <strong>6.8%</strong>
+          </div>
+          <p class="micro-note">
+            Share within each role family labeled “Entry level.” Missing experience labels are retained,
+            not silently dropped.
+          </p>
+        </div>
+      </div>
+
+      <div class="seniority-strip" aria-label="Overall experience label mix">
+        <div style="--w:43.6" data-label="Mid-Senior 43.6%"></div>
+        <div style="--w:25.5" data-label="Missing 25.5%"></div>
+        <div style="--w:14.9" data-label="Entry 14.9%"></div>
+        <div style="--w:10.6" data-label="Associate 10.6%"></div>
+        <div style="--w:4.8" data-label="Director 4.8%"></div>
+        <div style="--w:.5" data-label="Internship 0.5%"></div>
+      </div>
+      <div class="strip-legend" id="seniorityLegend"></div>
+    </section>
+
+    <section class="section split-section reverse">
+      <div class="section-copy">
+        <p class="overline">03 · COMPENSATION</p>
+        <h2>Salary looks different once seniority enters the room.</h2>
+        <p>
+          Product Management has the highest observed median normalized salary, but that group
+          also contains a much more senior experience mix. The analysis treats this as an observed
+          association, not a claim that the title itself causes higher pay.
+        </p>
+        <div class="annotation">
+          <span>Important limitation</span>
+          <p>salary is missing for many postings, so sample size travels with every number.</p>
+        </div>
+      </div>
+
+      <div class="viz-card salary-card">
+        <div class="viz-header">
+          <span>Median normalized salary</span>
+          <small>postings with usable salary only</small>
+        </div>
+        <div id="salaryPlot" class="salary-plot"></div>
+      </div>
+    </section>
+
+    <section class="section skills-section">
+      <div class="section-heading">
+        <div>
+          <p class="overline">04 · TECHNICAL SIGNALS</p>
+          <h2>SQL travels across role boundaries.</h2>
+        </div>
+        <p>
+          Description-level keyword matching complements the broader skill tables by showing which
+          concrete tools are named in the work itself.
+        </p>
+      </div>
+
+      <div class="skills-layout">
+        <div class="skill-rank" id="skillRank"></div>
+
+        <div class="signal-card">
+          <span class="signal-label">Cross-role signal</span>
+          <strong>SQL</strong>
+          <p>
+            Mentioned in 29.3% of all target descriptions — including 37.8% of Data Analyst,
+            66.7% of Business Intelligence, and 18.6% of Product Management postings.
+          </p>
+          <div class="signal-tags">
+            <span>Data</span><span>BI</span><span>Product</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section method-section">
+      <div>
+        <p class="overline">05 · METHOD</p>
+        <h2>The analysis is relational, not one giant CSV.</h2>
+      </div>
+
+      <div class="method-grid">
+        <article>
+          <span class="step">1</span>
+          <h3>Clean titles</h3>
+          <p>Conservatively classify clear titles into comparable role families.</p>
+        </article>
+        <article>
+          <span class="step">2</span>
+          <h3>Preserve missingness</h3>
+          <p>Keep missing experience labels visible instead of deleting those records.</p>
+        </article>
+        <article>
+          <span class="step">3</span>
+          <h3>Join skill tables</h3>
+          <p>job_skills → skills on skill_abr, then back to postings on job_id.</p>
+        </article>
+        <article>
+          <span class="step">4</span>
+          <h3>Join industries</h3>
+          <p>job_industries → industries on industry_id, then connect to target postings.</p>
+        </article>
+      </div>
+
+      <div class="relationship">
+        <div class="table-node">
+          <span>postings</span>
+          <small>job_id · title · salary · experience</small>
+        </div>
+        <span class="connector">↔</span>
+        <div class="table-node">
+          <span>job_skills</span>
+          <small>job_id · skill_abr</small>
+        </div>
+        <span class="connector">↔</span>
+        <div class="table-node">
+          <span>skills</span>
+          <small>skill_abr · skill_name</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section conclusion-section">
+      <p class="overline">BOTTOM LINE</p>
+      <h2>Adjacent titles share tools. They do not share the same market.</h2>
+      <p>
+        The most useful finding is not a single salary or skill ranking. It is that role family changes
+        the seniority mix, the technical vocabulary, and how compensation should be interpreted.
+      </p>
+      <div class="footer-links">
+        <a href="JobMarketAnalysis.ipynb">Open the analysis notebook</a>
+        <a href="README.md">Read the methodology</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
