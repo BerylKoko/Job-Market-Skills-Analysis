@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <style>
+  text{font-family:Arial,sans-serif;fill:#222} .t{font-size:24px;font-weight:700}.l{font-size:15px}.v{font-size:14px;font-weight:700}.a{font-size:14px;fill:#555}
+  </style>
+  <text class="t" x="210" y="38">Tool and skill keywords mentioned in target-role descriptions</text><text class="l" x="198" y="96.45777777777778" text-anchor="end">Figma</text>
+    <rect x="210" y="75" width="44.436860068259385" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="262.4368600682594" y="96.45777777777778">2.1% (4)</text><text class="l" x="198" y="140.01333333333335" text-anchor="end">A/B testing</text>
+    <rect x="210" y="118.55555555555556" width="57.13310580204778" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="275.1331058020478" y="140.01333333333335">2.7% (5)</text><text class="l" x="198" y="183.5688888888889" text-anchor="end">R</text>
+    <rect x="210" y="162.11111111111111" width="156.58703071672355" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="374.5870307167236" y="183.5688888888889">7.4% (14)</text><text class="l" x="198" y="227.12444444444446" text-anchor="end">Jira</text>
+    <rect x="210" y="205.66666666666669" width="169.28327645051195" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="387.28327645051195" y="227.12444444444446">8.0% (15)</text><text class="l" x="198" y="270.68" text-anchor="end">Power BI</text>
+    <rect x="210" y="249.22222222222223" width="224.30034129692834" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="442.3003412969283" y="270.68">10.6% (20)</text><text class="l" x="198" y="314.23555555555555" text-anchor="end">Tableau</text>
+    <rect x="210" y="292.77777777777777" width="247.57679180887368" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="465.5767918088737" y="314.23555555555555">11.7% (22)</text><text class="l" x="198" y="357.79111111111115" text-anchor="end">Python</text>
+    <rect x="210" y="336.33333333333337" width="258.1569965870307" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="476.1569965870307" y="357.79111111111115">12.2% (23)</text><text class="l" x="198" y="401.3466666666667" text-anchor="end">Excel</text>
+    <rect x="210" y="379.8888888888889" width="484.5733788395904" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="702.5733788395904" y="401.3466666666667">22.9% (43)</text><text class="l" x="198" y="444.90222222222224" text-anchor="end">SQL</text>
+    <rect x="210" y="423.44444444444446" width="620" height="31.555555555555557" rx="3" fill="#4c78a8"/>
+    <text class="v" x="838" y="444.90222222222224">29.3% (55)</text><text class="a" x="520" y="502" text-anchor="middle">Share of target postings (%)</text></svg>
