@@ -10,11 +10,6 @@
 <body>
   <main>
     <section class="hero section">
-      <div class="eyebrow-row">
-        <span>JOB MARKET & SKILLS ANALYSIS</span>
-        <span class="status-dot">Exploratory analysis</span>
-      </div>
-
       <div class="hero-grid">
         <div>
           <p class="overline">The question</p>
@@ -62,8 +57,7 @@
         <h2>The dataset is not evenly distributed across adjacent roles.</h2>
         <p>
           Business Analyst and Product Management account for most of the matched postings.
-          Product Analyst is too small to support strong comparison, so the analysis keeps its
-          sample-size limitation visible instead of pretending every category is equally stable.
+          Product Analyst appears only twice, so I left it out of stronger comparisons.
         </p>
         <div class="annotation">
           <span>Read this as</span>
@@ -87,8 +81,8 @@
           <h2>“Entry level” is not the default.</h2>
         </div>
         <p>
-          The strongest contrast appears when role families are viewed as different markets
-          rather than one generic early-career bucket.
+          Entry-level availability varies a lot by role. Data Analyst has a much larger
+          entry-level share than Business Analyst or Product Management.
         </p>
       </div>
 
@@ -116,8 +110,8 @@
             <strong>6.8%</strong>
           </div>
           <p class="micro-note">
-            Share within each role family labeled “Entry level.” Missing experience labels are retained,
-            not silently dropped.
+            Share within each role family labeled “Entry level.” I kept missing experience labels
+            as a separate category instead of removing them.
           </p>
         </div>
       </div>
@@ -136,15 +130,14 @@
     <section class="section split-section reverse">
       <div class="section-copy">
         <p class="overline">03 · COMPENSATION</p>
-        <h2>Salary looks different once seniority enters the room.</h2>
+        <h2>Salary looks different when taking seniority into account.</h2>
         <p>
-          Product Management has the highest observed median normalized salary, but that group
-          also contains a much more senior experience mix. The analysis treats this as an observed
-          association, not a claim that the title itself causes higher pay.
+          Product Management has the highest median normalized salary in the sample, but it also
+          includes more senior roles. Seniority is important context for the salary comparison.
         </p>
         <div class="annotation">
           <span>Important limitation</span>
-          <p>salary is missing for many postings, so sample size travels with every number.</p>
+          <p>Salary is missing for many postings, so each median is shown with its sample size.</p>
         </div>
       </div>
 
@@ -189,7 +182,7 @@
     <section class="section method-section">
       <div>
         <p class="overline">05 · METHOD</p>
-        <h2>The analysis is relational, not one giant CSV.</h2>
+        <h2>How I combined the data.</h2>
       </div>
 
       <div class="method-grid">
@@ -200,8 +193,8 @@
         </article>
         <article>
           <span class="step">2</span>
-          <h3>Preserve missingness</h3>
-          <p>Keep missing experience labels visible instead of deleting those records.</p>
+          <h3>Keep missing labels</h3>
+          <p>Keep missing experience labels as their own category instead of removing those postings.</p>
         </article>
         <article>
           <span class="step">3</span>
@@ -235,10 +228,11 @@
 
     <section class="section conclusion-section">
       <p class="overline">BOTTOM LINE</p>
-      <h2>Adjacent titles share tools. They do not share the same market.</h2>
+      <h2>The roles overlap, but the patterns are different.</h2>
       <p>
-        The most useful finding is not a single salary or skill ranking. It is that role family changes
-        the seniority mix, the technical vocabulary, and how compensation should be interpreted.
+        Data Analyst, Business Analyst, Business Intelligence, and Product Management share some tools,
+        but their seniority and salary patterns differ. I compared them separately rather than treating
+        them as one group.
       </p>
       <div class="footer-links">
         <a href="JobMarketAnalysis.ipynb">Open the analysis notebook</a>
