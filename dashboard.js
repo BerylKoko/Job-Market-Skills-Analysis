@@ -112,7 +112,7 @@ function renderLegend() {
   const colors = [
     "#667281",
     "#343c47",
-    "#73e0c1",
+    "#f0b45a",
     "#9fb0b7",
     "#d6c48e",
     "#dfe6e8",
