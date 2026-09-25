@@ -1,63 +1,53 @@
 # Findings
 
-This analysis uses the **14,680 valid postings currently committed in this repository**. It is a snapshot of the larger LinkedIn Job Postings 2023–2024 source dataset.
+## Scope
 
-## 1. Data / BI has the strongest entry-level signal in this snapshot
+14,681 total postings were available in `postings.csv`. A conservative title classifier identified 188 postings across five target role families.
 
-Among postings with a stated experience level:
+## 1. Role volume
 
-| Role family | Entry-level postings | Experience-labeled postings | Entry-level share |
-| --- | ---: | ---: | ---: |
-| Data / BI | 20 | 44 | **45.5%** |
-| Software Engineering | 19 | 157 | **12.1%** |
-| Business Analysis | 5 | 49 | **10.2%** |
-| Product | 5 | 63 | **7.9%** |
+- Business Analyst: 67
+- Product Management: 59
+- Data Analyst: 45
+- Business Intelligence: 15
+- Product Analyst: 2
 
-**Interpretation:** the Data / BI subset is much more likely to carry an explicit “Entry level” label than the other three role families.
+## 2. Experience mix
 
-**Limitation:** stated LinkedIn experience level is not the same thing as years-of-experience requirements inside the job description.
+- Mid-Senior level: 82 (43.6%)
+- Entry level: 28 (14.9%)
+- Associate: 20 (10.6%)
+- Director: 9 (4.8%)
+- Internship: 1 (0.5%)
+- Missing: 48 (25.5%)
 
-## 2. Product and Software Engineering have the highest median salary in the salary-reporting subset
+Data Analyst had the largest Entry-level share: 19 of 45 postings (42.2%).
 
-After retaining normalized salaries between $20,000 and $500,000:
+## 3. Salary coverage
 
-| Role family | Salary records | Median normalized salary |
-| --- | ---: | ---: |
-| Product | 29 | **$152,625** |
-| Software Engineering | 49 | **$145,600** |
-| Business Analysis | 23 | **$90,000** |
-| Data / BI | 16 | **$86,320** |
+Median normalized salary among postings with usable salary values:
 
-**Interpretation:** the Product and Software Engineering postings that disclose usable salary data sit at substantially higher medians in this sample.
+- Product Management: $174,300 (n=23)
+- Business Intelligence: $120,640 (n=6)
+- Business Analyst: $91,957 (n=19)
+- Data Analyst: $81,640 (n=10)
 
-**Limitation:** salary coverage is sparse, so these figures should not be generalized to all postings.
+These values should not be interpreted as pure role effects because the role groups contain different seniority mixes.
 
-## 3. The skill profile changes meaningfully by role family
+## 4. Description keywords
 
-Keyword mentions in job descriptions:
+Across the 188 target postings:
 
-| Role family | SQL | Python | Excel | Power BI | Tableau | AWS | Azure |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Product | 14.1% | 10.3% | 6.4% | 1.3% | 10.3% | 5.1% | 6.4% |
-| Data / BI | **38.6%** | 15.8% | **38.6%** | **17.5%** | 10.5% | 5.3% | 1.8% |
-| Business Analysis | 26.0% | 6.8% | 24.7% | 9.6% | 6.8% | 2.7% | 2.7% |
-| Software Engineering | 24.7% | **33.3%** | 2.7% | 1.4% | 2.7% | **39.3%** | **26.0%** |
+- SQL: 55 (29.3%)
+- Excel: 43 (22.9%)
+- Python: 23 (12.2%)
+- Tableau: 22 (11.7%)
+- Power BI: 20 (10.6%)
+- Jira: 15 (8.0%)
+- R: 14 (7.4%)
+- A/B testing: 5 (2.7%)
+- Figma: 4 (2.1%)
 
-**Interpretation:** Data / BI leans heavily toward SQL and Excel, while Software Engineering shows a much stronger cloud + Python profile.
+## Limitations
 
-**Limitation:** these are description mentions, not a guarantee that every mention is a hard requirement.
-
-## 4. Software Engineering is the most remote-friendly of the four groups
-
-| Role family | Remote-allowed share |
-| --- | ---: |
-| Software Engineering | **36.5%** |
-| Data / BI | **21.1%** |
-| Product | **14.1%** |
-| Business Analysis | **13.7%** |
-
-The field is taken directly from the dataset's `remote_allowed` indicator.
-
-## What I would investigate next
-
-A larger follow-up could parse explicit years-of-experience requirements from job descriptions and test whether roles labeled “Entry level” still ask for 2–5 years of prior experience. That question is interesting, but this compact portfolio version does not claim to answer it without doing that extraction first.
+The analysis is descriptive, title classification is rule-based, salary and experience fields are incomplete, and literal keyword matching does not capture every possible way a requirement can be expressed.
