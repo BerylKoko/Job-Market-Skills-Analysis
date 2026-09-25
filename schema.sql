@@ -1,52 +1,40 @@
--- DuckDB schema for the repository CSV snapshot.
--- Run from the repository root:
---   duckdb job_market.duckdb < schema.sql
+-- Job Market & Skills Analysis
+-- Lightweight relational schema matching the CSV structure used in this project.
 
-CREATE OR REPLACE VIEW postings AS
-SELECT *
-FROM read_csv_auto('postings.csv', header = true, sample_size = -1);
+CREATE TABLE job_postings (
+    job_id BIGINT PRIMARY KEY,
+    company_name TEXT,
+    title TEXT,
+    description TEXT,
+    location TEXT,
+    formatted_experience_level TEXT,
+    normalized_salary REAL,
+    remote_allowed INTEGER,
+    formatted_work_type TEXT
+);
 
-CREATE OR REPLACE VIEW companies AS
-SELECT *
-FROM read_csv_auto('companies.csv', header = true, sample_size = -1);
+CREATE TABLE skills (
+    skill_abr TEXT PRIMARY KEY,
+    skill_name TEXT NOT NULL
+);
 
-CREATE OR REPLACE VIEW salaries AS
-SELECT *
-FROM read_csv_auto('salaries.csv', header = true, sample_size = -1);
+CREATE TABLE job_skills (
+    job_id BIGINT NOT NULL,
+    skill_abr TEXT NOT NULL,
+    PRIMARY KEY (job_id, skill_abr),
+    FOREIGN KEY (job_id) REFERENCES job_postings(job_id),
+    FOREIGN KEY (skill_abr) REFERENCES skills(skill_abr)
+);
 
-CREATE OR REPLACE VIEW job_skills AS
-SELECT *
-FROM read_csv_auto('job_skills.csv', header = true, sample_size = -1);
+CREATE TABLE industries (
+    industry_id INTEGER PRIMARY KEY,
+    industry_name TEXT NOT NULL
+);
 
-CREATE OR REPLACE VIEW skills AS
-SELECT *
-FROM read_csv_auto('skills.csv', header = true, sample_size = -1);
-
-CREATE OR REPLACE VIEW job_industries AS
-SELECT *
-FROM read_csv_auto('job_industries.csv', header = true, sample_size = -1);
-
-CREATE OR REPLACE VIEW industries AS
-SELECT *
-FROM read_csv_auto('industries.csv', header = true, sample_size = -1);
-
-CREATE OR REPLACE VIEW target_roles AS
-SELECT
-    *,
-    CASE
-        WHEN regexp_matches(lower(title),
-             '(associate product manager|product manager|product management|product analyst|product operations|product owner)')
-            THEN 'Product'
-        WHEN regexp_matches(lower(title),
-             '(data analyst|analytics analyst|business intelligence analyst|bi analyst|reporting analyst)')
-            THEN 'Data / BI'
-        WHEN regexp_matches(lower(title),
-             '(business analyst|business systems analyst|systems analyst|technical business analyst)')
-            THEN 'Business Analysis'
-        WHEN regexp_matches(lower(title),
-             '(software engineer|software developer|frontend|front-end|backend|back-end|full stack|full-stack)')
-            THEN 'Software Engineering'
-        ELSE NULL
-    END AS role_family
-FROM postings
-WHERE role_family IS NOT NULL;
+CREATE TABLE job_industries (
+    job_id BIGINT NOT NULL,
+    industry_id INTEGER NOT NULL,
+    PRIMARY KEY (job_id, industry_id),
+    FOREIGN KEY (job_id) REFERENCES job_postings(job_id),
+    FOREIGN KEY (industry_id) REFERENCES industries(industry_id)
+);
