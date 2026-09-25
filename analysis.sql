@@ -1,101 +1,100 @@
 -- Job Market & Skills Analysis
--- Requires schema.sql to be loaded first.
+-- Example SQL analyses for the relational version of the project.
 
--- 1. Role-family volume.
+WITH classified AS (
+    SELECT
+        job_id,
+        title,
+        COALESCE(NULLIF(formatted_experience_level, ''), 'Missing') AS experience_level,
+        normalized_salary,
+        CASE
+            WHEN LOWER(title) LIKE '%product manager%' THEN 'Product management'
+            WHEN LOWER(title) LIKE '%product analyst%' THEN 'Product analyst'
+            WHEN LOWER(title) LIKE '%business intelligence%' OR LOWER(title) LIKE '%bi analyst%'
+                THEN 'Business intelligence'
+            WHEN LOWER(title) LIKE '%business analyst%' OR LOWER(title) LIKE '%business systems analyst%'
+                THEN 'Business analyst'
+            WHEN LOWER(title) LIKE '%data analyst%' OR LOWER(title) LIKE '%analytics analyst%'
+                THEN 'Data analyst'
+        END AS role_family
+    FROM job_postings
+)
 SELECT role_family, COUNT(*) AS postings
-FROM target_roles
+FROM classified
+WHERE role_family IS NOT NULL
 GROUP BY role_family
 ORDER BY postings DESC;
 
--- 2. How much of each role family is explicitly labeled entry level?
-WITH experience AS (
+WITH classified AS (
     SELECT
-        role_family,
-        COUNT(*) FILTER (
-            WHERE formatted_experience_level IS NOT NULL
-              AND trim(formatted_experience_level) <> ''
-        ) AS experience_labeled,
-        COUNT(*) FILTER (
-            WHERE formatted_experience_level = 'Entry level'
-        ) AS entry_level
-    FROM target_roles
-    GROUP BY role_family
+        job_id,
+        COALESCE(NULLIF(formatted_experience_level, ''), 'Missing') AS experience_level,
+        CASE
+            WHEN LOWER(title) LIKE '%product manager%' THEN 'Product management'
+            WHEN LOWER(title) LIKE '%product analyst%' THEN 'Product analyst'
+            WHEN LOWER(title) LIKE '%business intelligence%' OR LOWER(title) LIKE '%bi analyst%'
+                THEN 'Business intelligence'
+            WHEN LOWER(title) LIKE '%business analyst%' OR LOWER(title) LIKE '%business systems analyst%'
+                THEN 'Business analyst'
+            WHEN LOWER(title) LIKE '%data analyst%' OR LOWER(title) LIKE '%analytics analyst%'
+                THEN 'Data analyst'
+        END AS role_family
+    FROM job_postings
 )
-SELECT
-    role_family,
-    experience_labeled,
-    entry_level,
-    ROUND(100.0 * entry_level / NULLIF(experience_labeled, 0), 1)
-        AS entry_level_pct
-FROM experience
-ORDER BY entry_level_pct DESC;
+SELECT role_family, experience_level, COUNT(*) AS postings
+FROM classified
+WHERE role_family IS NOT NULL
+GROUP BY role_family, experience_level
+ORDER BY role_family, postings DESC;
 
--- 3. Median normalized salary by role family.
--- Restrict to a broad plausible annual range to reduce obvious outliers.
+WITH classified AS (
+    SELECT
+        job_id,
+        normalized_salary,
+        CASE
+            WHEN LOWER(title) LIKE '%product manager%' THEN 'Product management'
+            WHEN LOWER(title) LIKE '%product analyst%' THEN 'Product analyst'
+            WHEN LOWER(title) LIKE '%business intelligence%' OR LOWER(title) LIKE '%bi analyst%'
+                THEN 'Business intelligence'
+            WHEN LOWER(title) LIKE '%business analyst%' OR LOWER(title) LIKE '%business systems analyst%'
+                THEN 'Business analyst'
+            WHEN LOWER(title) LIKE '%data analyst%' OR LOWER(title) LIKE '%analytics analyst%'
+                THEN 'Data analyst'
+        END AS role_family
+    FROM job_postings
+)
 SELECT
     role_family,
     COUNT(normalized_salary) AS salary_records,
-    ROUND(MEDIAN(normalized_salary), 0) AS median_normalized_salary
-FROM target_roles
-WHERE normalized_salary BETWEEN 20000 AND 500000
+    AVG(normalized_salary) AS mean_normalized_salary
+FROM classified
+WHERE role_family IS NOT NULL
+  AND normalized_salary > 0
 GROUP BY role_family
-ORDER BY median_normalized_salary DESC;
+ORDER BY mean_normalized_salary DESC;
 
--- 4. Remote-allowed share.
-SELECT
-    role_family,
-    COUNT(*) AS postings,
-    COUNT(*) FILTER (WHERE TRY_CAST(remote_allowed AS DOUBLE) = 1) AS remote_allowed,
-    ROUND(
-        100.0 * COUNT(*) FILTER (WHERE TRY_CAST(remote_allowed AS DOUBLE) = 1)
-        / COUNT(*),
-        1
-    ) AS remote_pct
-FROM target_roles
-GROUP BY role_family
-ORDER BY remote_pct DESC;
-
--- 5. Granular skill mentions in descriptions.
-WITH skill_flags AS (
+WITH classified AS (
     SELECT
-        role_family,
-        regexp_matches(lower(description), '\\bsql\\b') AS sql,
-        regexp_matches(lower(description), '\\bpython\\b') AS python,
-        regexp_matches(lower(description), '\\bexcel\\b') AS excel,
-        regexp_matches(lower(description), '\\btableau\\b') AS tableau,
-        regexp_matches(lower(description), '\\bpower[ ]*bi\\b') AS power_bi,
-        regexp_matches(lower(description), '\\baws\\b|amazon web services') AS aws,
-        regexp_matches(lower(description), '\\bazure\\b') AS azure
-    FROM target_roles
+        job_id,
+        CASE
+            WHEN LOWER(title) LIKE '%product manager%' THEN 'Product management'
+            WHEN LOWER(title) LIKE '%product analyst%' THEN 'Product analyst'
+            WHEN LOWER(title) LIKE '%business intelligence%' OR LOWER(title) LIKE '%bi analyst%'
+                THEN 'Business intelligence'
+            WHEN LOWER(title) LIKE '%business analyst%' OR LOWER(title) LIKE '%business systems analyst%'
+                THEN 'Business analyst'
+            WHEN LOWER(title) LIKE '%data analyst%' OR LOWER(title) LIKE '%analytics analyst%'
+                THEN 'Data analyst'
+        END AS role_family
+    FROM job_postings
 )
 SELECT
-    role_family,
-    ROUND(100.0 * SUM(sql::INT) / COUNT(*), 1) AS sql_pct,
-    ROUND(100.0 * SUM(python::INT) / COUNT(*), 1) AS python_pct,
-    ROUND(100.0 * SUM(excel::INT) / COUNT(*), 1) AS excel_pct,
-    ROUND(100.0 * SUM(tableau::INT) / COUNT(*), 1) AS tableau_pct,
-    ROUND(100.0 * SUM(power_bi::INT) / COUNT(*), 1) AS power_bi_pct,
-    ROUND(100.0 * SUM(aws::INT) / COUNT(*), 1) AS aws_pct,
-    ROUND(100.0 * SUM(azure::INT) / COUNT(*), 1) AS azure_pct
-FROM skill_flags
-GROUP BY role_family
-ORDER BY role_family;
-
--- 6. Top locations by role family.
-WITH ranked AS (
-    SELECT
-        role_family,
-        location,
-        COUNT(*) AS postings,
-        ROW_NUMBER() OVER (
-            PARTITION BY role_family
-            ORDER BY COUNT(*) DESC
-        ) AS rank
-    FROM target_roles
-    WHERE location IS NOT NULL AND trim(location) <> ''
-    GROUP BY role_family, location
-)
-SELECT role_family, location, postings
-FROM ranked
-WHERE rank <= 5
-ORDER BY role_family, rank;
+    c.role_family,
+    s.skill_name,
+    COUNT(*) AS tagged_postings
+FROM classified c
+JOIN job_skills js ON c.job_id = js.job_id
+JOIN skills s ON js.skill_abr = s.skill_abr
+WHERE c.role_family IS NOT NULL
+GROUP BY c.role_family, s.skill_name
+ORDER BY c.role_family, tagged_postings DESC;
