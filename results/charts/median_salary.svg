@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+<rect width="100%" height="100%" fill="#0d1117"/>
+<text x="30" y="40" fill="#f3f5f8" font-size="28" font-weight="700" font-family="Arial, sans-serif">Median normalized salary by role family</text>
+<text x="30" y="68" fill="#aab3c3" font-size="14" font-family="Arial, sans-serif">Only salary records between $20K and $500K · incomplete salary coverage</text>
+<text x="30" y="122" fill="#dce3ec" font-size="18" font-family="Arial, sans-serif">Product</text>
+<rect x="220" y="102" width="600" height="28" rx="7" fill="#1c2530"/>
+<rect x="220" y="102" width="555.0" height="28" rx="7" fill="#69ddc9"/>
+<text x="787.0" y="122" fill="#f3f5f8" font-size="16" font-weight="700" font-family="Arial, sans-serif">$153K</text>
+<text x="30" y="194" fill="#dce3ec" font-size="18" font-family="Arial, sans-serif">Software Engineering</text>
+<rect x="220" y="174" width="600" height="28" rx="7" fill="#1c2530"/>
+<rect x="220" y="174" width="529.5" height="28" rx="7" fill="#69ddc9"/>
+<text x="761.5" y="194" fill="#f3f5f8" font-size="16" font-weight="700" font-family="Arial, sans-serif">$146K</text>
+<text x="30" y="266" fill="#dce3ec" font-size="18" font-family="Arial, sans-serif">Business Analysis</text>
+<rect x="220" y="246" width="600" height="28" rx="7" fill="#1c2530"/>
+<rect x="220" y="246" width="327.3" height="28" rx="7" fill="#69ddc9"/>
+<text x="559.3" y="266" fill="#f3f5f8" font-size="16" font-weight="700" font-family="Arial, sans-serif">$90K</text>
+<text x="30" y="338" fill="#dce3ec" font-size="18" font-family="Arial, sans-serif">Data / BI</text>
+<rect x="220" y="318" width="600" height="28" rx="7" fill="#1c2530"/>
+<rect x="220" y="318" width="313.9" height="28" rx="7" fill="#69ddc9"/>
+<text x="545.9" y="338" fill="#f3f5f8" font-size="16" font-weight="700" font-family="Arial, sans-serif">$86K</text>
+
+</svg>

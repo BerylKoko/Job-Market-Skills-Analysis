@@ -1,181 +1,139 @@
 # Job Market & Skills Analysis
 
-A compact SQL and data-modeling project focused on practical questions about analyst, product, and technical roles.
+A compact analysis of LinkedIn job postings focused on one practical question:
 
-## Project goal
+> **Which early-career paths look most accessible across product, data/BI, business analysis, and software engineering — and what skills and pay patterns separate them?**
 
-Build a relational dataset of job postings, companies, locations, industries, and skills, then use SQL to answer decision-oriented questions about the job market.
+This project uses the LinkedIn Job Postings 2023–2024 dataset published on Kaggle by Arsh Koneru. The CSV snapshot committed in this repository contains **14,680 valid postings** from the larger source dataset.
 
-The point of the project is to demonstrate:
+## Why I built this
 
-- relational data modeling
-- data cleaning
-- joins
-- CTEs
-- aggregations
-- window functions
-- `CASE` statements
-- useful metrics
-- turning query results into clear conclusions
+Job titles like “entry level,” “analyst,” and “product” can hide very different expectations. I wanted to compare adjacent career paths using the same source data rather than relying on job-search anecdotes.
 
-This is an analysis project, not a frontend project. Keep it focused.
+I focused on four role families:
 
-## Core questions
+- Product
+- Data / BI
+- Business Analysis
+- Software Engineering
 
-Start with these questions and keep only the ones the data can support well:
+The analysis looks at role volume, stated experience level, normalized salary, remote availability, location, and recurring technical keywords in job descriptions.
 
-1. Which skills are most common in $90k+ analyst, product, and technical roles?
-2. Which skills tend to appear together?
-3. Which job titles offer the highest pay with the lowest experience requirements?
-4. How do requirements differ across tech, finance, healthcare, consulting, and other industries?
-5. Which cities have the best combination of salary and number of openings?
-6. Does requiring Python, SQL, or BI tools correlate with higher salary bands?
-7. Which skills give candidates the broadest access across multiple role families?
+## Key findings
 
-## Suggested data model
+### 1. Data / BI had the clearest entry-level signal
 
-A useful starting point:
+Among postings with a stated experience level, **45.5% of Data / BI roles were labeled Entry level**. The equivalent shares were **12.1% for Software Engineering, 10.2% for Business Analysis, and 7.9% for Product**.
 
-- `industries`
-- `companies`
-- `locations`
-- `job_postings`
-- `skills`
-- `job_skills`
+This does not mean Data / BI is “easy” to enter. It means the dataset labeled a much larger share of those postings as entry level.
 
-Possible relationships:
+### 2. Product paid highly in the salary-reporting subset, but entry-level volume was thin
 
-- one industry -> many companies
-- one company -> many job postings
-- one location -> many job postings
-- many job postings <-> many skills through `job_skills`
+The median normalized salary among valid salary records was:
 
-The final schema should come from the data you actually choose. Do not force this exact structure if the dataset suggests a better one.
+- **Product: $152,625**
+- **Software Engineering: $145,600**
+- **Business Analysis: $90,000**
+- **Data / BI: $86,320**
 
-## Suggested workflow
+Salary coverage is incomplete, so these numbers describe the salary-reporting subset rather than every posting.
 
-### 1. Choose a dataset
+### 3. Data / BI descriptions emphasized SQL and Excel
 
-Aim for roughly 500-2,000 job postings if practical.
+Within the role-family subset, keyword matching on job descriptions found:
 
-Useful raw fields may include:
+- **Data / BI:** SQL 38.6%, Excel 38.6%, Power BI 17.5%, Python 15.8%
+- **Business Analysis:** SQL 26.0%, Excel 24.7%
+- **Software Engineering:** AWS 39.3%, Python 33.3%, Azure 26.0%, SQL 24.7%
+- **Product:** SQL 14.1%, Python 10.3%, Tableau 10.3%
 
-- job title
-- company
-- industry
-- city/state
-- minimum and maximum salary
-- years of experience
-- job description
-- listed skills
-- employment type
-- posting date
+The dataset's provided skill mapping contains broad functional categories, so this project extracts granular tools such as SQL and Python directly from posting descriptions.
 
-### 2. Inspect and clean the data
+### 4. Remote availability varied substantially by role family
 
-Use `scripts/clean_data.py` for cleaning that is easier in Python.
+The share of postings marked remote-allowed was:
 
-Potential tasks:
+- **Software Engineering: 36.5%**
+- **Data / BI: 21.1%**
+- **Product: 14.1%**
+- **Business Analysis: 13.7%**
 
-- standardize job titles
-- clean salary strings
-- split location fields
-- normalize company names
-- standardize industries
-- extract or standardize skills
-- handle missing values
+## Methods
 
-Document meaningful cleaning decisions rather than silently changing the data.
+### Role-family classification
 
-### 3. Design the relational model
+Titles are grouped with transparent keyword rules. For example:
 
-Use `schema.sql`.
+- Product: Product Manager, Product Analyst, Product Operations, Product Owner
+- Data / BI: Data Analyst, Analytics Analyst, BI Analyst, Reporting Analyst
+- Business Analysis: Business Analyst, Business Systems Analyst, Systems Analyst
+- Software Engineering: Software Engineer/Developer, Frontend, Backend, Full Stack
 
-Think through:
+The rules intentionally favor precision over capturing every possible adjacent title.
 
-- primary keys
-- foreign keys
-- which values deserve their own tables
-- many-to-many relationships
-- avoiding repeated company, location, and skill text
+### Salary handling
 
-Add an ER diagram to `diagrams/` when the schema is stable.
+I use `normalized_salary` and retain values between **$20,000 and $500,000** for salary summaries. This avoids obvious outliers while preserving a broad range of legitimate annual compensation.
 
-### 4. Load the cleaned data
+### Skill extraction
 
-Load the cleaned tables into the SQL database you choose. Document the database and import method in this README once decided.
+The repository includes LinkedIn's broad skill-category mappings, but those categories do not distinguish tools like SQL, Python, Excel, Tableau, or Power BI. For this analysis, those skills are identified with case-insensitive keyword matching in `description`.
 
-### 5. Answer decision-oriented questions
+## Reproduce the analysis
 
-Use `analysis.sql`.
+Install dependencies:
 
-Use SQL features when they help answer a real question, including:
+```bash
+pip install -r requirements.txt
+```
 
-- multi-table joins
-- CTEs
-- `GROUP BY` and aggregations
-- `CASE`
-- window functions
-- ranking
-- percentages and rates
-- role, location, salary, and industry segmentation
+Run the Python analysis:
 
-Do not add techniques merely to check a box.
+```bash
+python scripts/analyze_jobs.py
+```
 
-### 6. Turn results into conclusions
+Or run the SQL workflow with DuckDB:
 
-For each important result, record:
-
-- the question
-- the metric or method
-- the result
-- what the result suggests
-- an important limitation or caveat
-
-Save the strongest conclusions in `results/findings.md` and useful charts in `results/charts/`.
-
-## Target final deliverables
-
-A finished version should ideally contain:
-
-- a clear relational schema
-- an ER diagram
-- cleaned data or reproducible cleaning steps
-- about 8-12 strong SQL analyses
-- 3-5 charts or tables
-- a concise findings summary
-
-## How the same project can be presented differently
-
-### Analyst / BI framing
-
-Emphasize SQL, relational modeling, cleaning, metrics, joins, CTEs, window functions, and findings.
-
-### Product / PM framing
-
-Emphasize choosing useful questions, defining metrics, comparing segments, interpreting tradeoffs, and turning data into recommendations.
-
-Same project, different presentation.
+```bash
+duckdb job_market.duckdb < schema.sql
+duckdb job_market.duckdb < analysis.sql
+```
 
 ## Repository structure
 
 ```text
 Job-Market-Skills-Analysis/
-├── data/
-│   └── README.md
-├── diagrams/
-│   └── README.md
-├── results/
-│   ├── charts/
-│   └── findings.md
-├── scripts/
-│   └── clean_data.py
-├── analysis.sql
+├── postings.csv
+├── companies.csv
+├── salaries.csv
+├── job_skills.csv
+├── skills.csv
+├── job_industries.csv
+├── industries.csv
 ├── schema.sql
-├── requirements.txt
+├── analysis.sql
+├── scripts/
+│   ├── clean_data.py
+│   └── analyze_jobs.py
+├── results/
+│   ├── findings.md
+│   ├── summary.csv
+│   └── charts/
+│       ├── entry_level_share.svg
+│       ├── median_salary.svg
+│       └── skill_demand.svg
 └── README.md
 ```
 
-## Status
+## Limitations
 
-Project skeleton created. Data source and final schema are intentionally still open decisions.
+- This repository contains a **14,680-posting snapshot**, not the full source dataset.
+- Experience level and salary are missing for many postings.
+- Role families are rule-based and do not capture every adjacent title.
+- Skill frequencies are keyword matches in descriptions; they measure mentions, not proficiency requirements.
+- This is a historical 2023–2024 LinkedIn snapshot, not a description of the 2026 job market.
+
+## Data source
+
+LinkedIn Job Postings 2023–2024, Arsh Koneru (Kaggle): `arshkon/linkedin-job-postings`.
