@@ -1,83 +1,52 @@
-"""Light cleaning helpers for the LinkedIn job-posting snapshot."""
+"""Cleaning helpers for Job Market & Skills Analysis."""
 
-from pathlib import Path
-
+import re
 import pandas as pd
 
+POSTING_COLUMNS = [
+    "job_id",
+    "title",
+    "description",
+    "location",
+    "formatted_experience_level",
+    "normalized_salary",
+    "remote_allowed",
+    "formatted_work_type",
+]
 
-ROOT = Path(__file__).resolve().parents[1]
-RAW = ROOT / "postings.csv"
-OUTPUT = ROOT / "data" / "analysis_jobs.csv"
-
-
-def classify_role(title: str) -> str | None:
+def classify_role(title):
     title = str(title).lower()
 
-    product_terms = (
-        "product manager",
-        "product management",
-        "product analyst",
-        "product operations",
-        "product owner",
+    if re.search(r"\\b(product manager|associate product manager|product management)\\b", title):
+        return "Product management"
+    if re.search(r"\\bproduct analyst\\b", title):
+        return "Product analyst"
+    if re.search(r"\\b(business intelligence|bi analyst|business intelligence analyst)\\b", title):
+        return "Business intelligence"
+    if re.search(r"\\b(business systems analyst|business system analyst|business analyst)\\b", title):
+        return "Business analyst"
+    if re.search(r"\\b(data analyst|analytics analyst|data analytics analyst)\\b", title):
+        return "Data analyst"
+
+    return pd.NA
+
+def load_target_postings(path="postings.csv"):
+    postings = pd.read_csv(path, usecols=POSTING_COLUMNS)
+    postings["role_family"] = postings["title"].apply(classify_role)
+
+    target = postings.dropna(subset=["role_family"]).copy()
+    target["formatted_experience_level"] = (
+        target["formatted_experience_level"]
+        .fillna("Missing")
+        .replace("", "Missing")
     )
-    data_terms = (
-        "data analyst",
-        "analytics analyst",
-        "business intelligence analyst",
-        "bi analyst",
-        "reporting analyst",
+    target["normalized_salary"] = pd.to_numeric(
+        target["normalized_salary"],
+        errors="coerce",
     )
-    business_terms = (
-        "business analyst",
-        "business systems analyst",
-        "technical business analyst",
-        "systems analyst",
-    )
-    software_terms = (
-        "software engineer",
-        "software developer",
-        "frontend",
-        "front-end",
-        "backend",
-        "back-end",
-        "full stack",
-        "full-stack",
-    )
-
-    if any(term in title for term in product_terms):
-        return "Product"
-    if any(term in title for term in data_terms):
-        return "Data / BI"
-    if any(term in title for term in business_terms):
-        return "Business Analysis"
-    if any(term in title for term in software_terms):
-        return "Software Engineering"
-    return None
-
-
-def main() -> None:
-    df = pd.read_csv(RAW, low_memory=False)
-    df = df.drop_duplicates(subset="job_id").copy()
-
-    df["role_family"] = df["title"].map(classify_role)
-    df = df[df["role_family"].notna()].copy()
-
-    df["normalized_salary"] = pd.to_numeric(
-        df["normalized_salary"], errors="coerce"
-    )
-    df["salary_valid"] = df["normalized_salary"].between(20_000, 500_000)
-
-    df["remote_allowed"] = (
-        pd.to_numeric(df["remote_allowed"], errors="coerce")
-        .fillna(0)
-        .eq(1)
-    )
-
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(OUTPUT, index=False)
-
-    print(f"Saved {len(df):,} target-role postings to {OUTPUT}")
-
+    target.loc[target["normalized_salary"] <= 0, "normalized_salary"] = pd.NA
+    return target
 
 if __name__ == "__main__":
-    main()
+    df = load_target_postings()
+    print(df["role_family"].value_counts())
