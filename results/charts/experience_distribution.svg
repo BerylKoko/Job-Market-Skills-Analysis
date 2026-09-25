@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <style>
+  text{font-family:Arial,sans-serif;fill:#222} .t{font-size:24px;font-weight:700}.l{font-size:15px}.v{font-size:14px;font-weight:700}.a{font-size:14px;fill:#555}
+  </style>
+  <text class="t" x="210" y="38">Experience labels across target-role postings</text><text class="l" x="198" y="111.26666666666668" text-anchor="end">Internship</text>
+    <rect x="210" y="75" width="7.560975609756098" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="225.5609756097561" y="111.26666666666668">1</text><text class="l" x="198" y="176.60000000000002" text-anchor="end">Director</text>
+    <rect x="210" y="140.33333333333334" width="68.04878048780488" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="286.0487804878049" y="176.60000000000002">9</text><text class="l" x="198" y="241.93333333333337" text-anchor="end">Associate</text>
+    <rect x="210" y="205.66666666666669" width="151.21951219512195" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="369.219512195122" y="241.93333333333337">20</text><text class="l" x="198" y="307.26666666666665" text-anchor="end">Entry level</text>
+    <rect x="210" y="271" width="211.70731707317074" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="429.70731707317077" y="307.26666666666665">28</text><text class="l" x="198" y="372.6" text-anchor="end">Missing</text>
+    <rect x="210" y="336.33333333333337" width="362.92682926829264" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="580.9268292682926" y="372.6">48</text><text class="l" x="198" y="437.9333333333334" text-anchor="end">Mid-Senior level</text>
+    <rect x="210" y="401.66666666666674" width="620" height="53.333333333333336" rx="3" fill="#4c78a8"/>
+    <text class="v" x="838" y="437.9333333333334">82</text><text class="a" x="520" y="502" text-anchor="middle">Postings</text></svg>
