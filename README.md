@@ -1,5 +1,7 @@
 # Job Market & Skills Analysis
 
+**Live site:** https://berylkoko.github.io/Job-Market-Skills-Analysis/
+
 An exploratory analysis of analyst, product, and business-intelligence job postings, presented in three layers:
 
 - **`index.html`** — executive-style visual presentation
